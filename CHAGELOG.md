@@ -1,0 +1,70 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Added
+
+- Multi-language support for the website.
+- "Get a Quote & Order" page with smooth animations.
+- Integration of a new API for authentication.
+
+### Fixed
+
+- Improved page load performance by optimizing React Query.
+- Fixed login issue when using OAuth.
+
+### Removed
+
+-.
+
+
+## [1.0.1] - 2025-03-21
+
+### Added
+
+- Create API for blog ,blog category,document, document category
+- Create Contact API and edit status for contact API
+
+### Changed
+
+- Chang `npm` to `yarn`
+
+### Fixed
+
+- No Fixed
+
+---
+
+# Changelog
+
+## [1.0.0] - 2025-03-20
+
+### Added
+- Initial release of the backend service.
+- Structured the backend project with a scalable and modular architecture.
+- Implemented authentication and authorization using JWT.
+- Designed and implemented role-based access control (RBAC).
+- Configured Docker container to run MongoDB and the backend service.
+
+### Changed
+.
+
+### Fixed
+- Optimized database queries for better performance.
+- Improved error handling across the API.
+
+
+## [0.1.0] - 2025-03-20
+
+### Added
+
+- Initialized the project and designed the file structure.
+
+---
+
+**Notes:**
+
+- This format follows [Keep a Changelog](https://keepachangelog.com/).
+- Uses [Semantic Versioning](https://semver.org/).
