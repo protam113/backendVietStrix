@@ -45,23 +45,21 @@ export const createContact = async (req: Request, res: Response) => {
   
 /**
  * ==========================
- * 📌 @HOOK useCategoryDetail
+ * 📌 @HOOK useContactList
  * ==========================
  *
- * @description Custom hook to retrieve details of a specific category.
+ * @description Custom hook to retrieve a list of contacts.
  *
- * @param {string} slug - The slug of the category.
- * @returns {Category | null} - The category object or null if not found.
+ * @returns {Contacts[]} - Array of contact objects.
  *
  * @usage
- * const { category, isLoading, isError } = useCategoryDetail(slug);
+ * const { contacts, isLoading, isError } = useContactList();
  *
  * @notes
- * - Fetches category details based on the provided slug.
- * - Populates subcategories for hierarchical data structure.
+ * - Supports pagination and filtering by status.
+ * - Automatically handles loading and error states.
  * - Uses React Query for efficient data fetching and caching.
  */
-
 export const getContacts = async (req: Request, res: Response) => {
   try {
     const { status, page = "1", limit = "10", createdAt_min = "desc" } = req.query;

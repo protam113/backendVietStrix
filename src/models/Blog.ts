@@ -31,4 +31,5 @@ const BlogsSchema = new Schema<IBlog>(
 BlogsSchema.index({ categories: 1 }); // Index tìm blog theo category nhanh hơn
 BlogsSchema.index({ title: "text", description: "text" }); // Tìm kiếm text cho title + description
 BlogsSchema.index({ type: 1 });
+
 export default mongoose.model<IBlog>("Blogs", BlogsSchema);

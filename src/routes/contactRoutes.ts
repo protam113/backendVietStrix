@@ -1,6 +1,6 @@
 import { createContact, deleteContact, getContactById, getContacts, updateContactStatus } from "../controllers/contactController";
 import express from "express";
-import { checkApiKey } from "../middleware/checkApiKey"; // Import middleware
+import { checkApiKey } from "../middleware/checkApiKey"; 
 
 
 const router = express.Router();
