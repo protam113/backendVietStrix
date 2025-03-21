@@ -8,6 +8,7 @@ interface IBlog extends Document {
   content: string;
   description: string;
   link?: string | null;
+  type: "normal" | "popular";
   categories: string[]; // ⚡ Nhiều category (dùng UUID)
 }
 
@@ -19,7 +20,9 @@ const BlogsSchema = new Schema<IBlog>(
     content: { type: String, required: true },
     description: { type: String, required: true },
     link: { type: String, default: null },
+    type: { type: String, enum: ["normal" , "popular"], default: "normal" }, // 🆕 Định nghĩa status
     categories: [{ type: String, ref: "BlogCategory", required: true }], // ⚡ Chuyển thành mảng
+    
   },
   { timestamps: true }
 );
@@ -27,5 +30,5 @@ const BlogsSchema = new Schema<IBlog>(
 // ⚡ Cải tiến Index
 BlogsSchema.index({ categories: 1 }); // Index tìm blog theo category nhanh hơn
 BlogsSchema.index({ title: "text", description: "text" }); // Tìm kiếm text cho title + description
-
+BlogsSchema.index({ type: 1 });
 export default mongoose.model<IBlog>("Blogs", BlogsSchema);

@@ -34,7 +34,7 @@ export const createBlog = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
-// 🔥 API lấy danh sách Docs có lọc theo Category + Pagination
+
 export const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
     try {
         let { category, page = "1", pageSize = "10" } = req.query;
@@ -44,24 +44,24 @@ export const getAllBlogs = async (req: Request, res: Response): Promise<void> =>
         const limit = Math.max(parseInt(pageSize as string), 1);
         const skip = (pageNum - 1) * limit;
 
-        // 🔥 Lọc theo categories (có thể lọc nhiều category)
-        let filter = {};
+        // Lọc theo categories (có thể lọc nhiều category)
+        let filter: any = {};
         if (category) {
             const categoryArray = (category as string).split(","); // Cho phép lọc theo nhiều category
             filter = { categories: { $in: categoryArray } };
         }
 
-        // 🔥 Query MongoDB
+        // Query MongoDB
         const blogs = await Blogs.find(filter)
             .populate("categories", "name slug") // Lấy thêm thông tin categories
             .skip(skip)
             .limit(limit);
 
-        // 🔥 Đếm tổng số docs
+        // Đếm tổng số docs
         const totalBlogs = await Blogs.countDocuments(filter);
         const totalPages = Math.ceil(totalBlogs / limit);
 
-        // ✅ Trả về dữ liệu + metadata pagination
+        // Trả về dữ liệu + metadata pagination
         res.status(200).json({
             data: blogs,
             pagination: {
@@ -77,11 +77,14 @@ export const getAllBlogs = async (req: Request, res: Response): Promise<void> =>
 };
 
 
+
 export const getOneBlog = async (req: Request, res: Response): Promise<void> => {
     try {
         const { slug } = req.params;
 
-        const blog = await Blogs.findOne({ slug }).populate("blogs", "name slug");
+        // Tìm blog theo slug và populate thông tin category
+        const blog = await Blogs.findOne({ slug })
+            .populate("categories", "name slug");
 
         if (!blog) {
             res.status(404).json({ message: "Blog not found" });
@@ -93,4 +96,3 @@ export const getOneBlog = async (req: Request, res: Response): Promise<void> => 
         res.status(500).json({ error: error.message });
     }
 };
-
