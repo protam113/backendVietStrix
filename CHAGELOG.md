@@ -17,7 +17,24 @@ All notable changes to this project will be documented in this file.
 
 ### Removed
 
--.
+---
+
+## [1.0.2] - 2025-03-22
+
+### Added
+
+- Add get blogs bay type, blog by category, blog by slug
+- Add type in blog model
+
+### Changed
+
+- Change get blogs list and add more logic to get blogs list
+
+### Fixed
+
+- No Fixed
+
+---
 
 
 ## [1.0.1] - 2025-03-21

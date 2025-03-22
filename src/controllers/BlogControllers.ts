@@ -5,7 +5,7 @@ import slugify from "slugify";
 
 export const createBlog = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, content, description, link, categories } = req.body;
+        const { title, content, description, link, categories, type } = req.body; // Lấy thêm type từ request
 
         // Kiểm tra danh mục có tồn tại không
         const existingCategories = await BlogCategory.find({ _id: { $in: categories } });
@@ -24,8 +24,11 @@ export const createBlog = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
+        // Kiểm tra giá trị type hợp lệ (chỉ nhận "normal" hoặc "popular")
+        const blogType = ["normal", "popular"].includes(type) ? type : "normal";
+
         // Tạo Docs mới
-        const newBlog = new Blogs({ title, slug, content, description, link, categories });
+        const newBlog = new Blogs({ title, slug, content, description, link, categories, type: blogType });
         await newBlog.save();
 
         res.status(201).json(newBlog);
@@ -35,9 +38,10 @@ export const createBlog = async (req: Request, res: Response): Promise<void> => 
 };
 
 
+
 export const getAllBlogs = async (req: Request, res: Response): Promise<void> => {
     try {
-        let { category, page = "1", pageSize = "10" } = req.query;
+        let { category, page = "1", pageSize = "10", type } = req.query;
 
         // Chuyển đổi page & pageSize sang số nguyên
         const pageNum = Math.max(parseInt(page as string), 1);
@@ -47,17 +51,22 @@ export const getAllBlogs = async (req: Request, res: Response): Promise<void> =>
         // Lọc theo categories (có thể lọc nhiều category)
         let filter: any = {};
         if (category) {
-            const categoryArray = (category as string).split(","); // Cho phép lọc theo nhiều category
-            filter = { categories: { $in: categoryArray } };
+            const categoryArray = (category as string).split(",");
+            filter.categories = { $in: categoryArray };
+        }
+
+        // Lọc theo type (nếu có)
+        if (type) {
+            filter.type = type; // Tìm blog có "type" là "popular" hoặc "normal"
         }
 
         // Query MongoDB
         const blogs = await Blogs.find(filter)
-            .populate("categories", "name slug") // Lấy thêm thông tin categories
+            .populate("categories", "name slug")
             .skip(skip)
             .limit(limit);
 
-        // Đếm tổng số docs
+        // Đếm tổng số blogs
         const totalBlogs = await Blogs.countDocuments(filter);
         const totalPages = Math.ceil(totalBlogs / limit);
 

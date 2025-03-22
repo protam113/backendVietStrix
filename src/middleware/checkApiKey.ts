@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 // API_KEY đúng (có thể lưu vào biến môi trường `.env`)
-const API_KEY = process.env.API_KEY || "";
+const API_KEY = process.env.NEXT_PRIVATE_API_KEY || "";
 
 export const checkApiKey = (req: Request, res: Response, next: NextFunction): void => {
     const clientApiKey = req.headers["api-key"] as string;
