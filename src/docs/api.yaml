@@ -1,0 +1,157 @@
+openapi: 3.0.1
+info:
+  title: API Quản lý Danh mục Tài liệu
+  description: API để quản lý các danh mục tài liệu
+  version: 1.0.0
+
+servers:
+  - url: 'http://localhost:3001/api/v1'
+
+components:
+  securitySchemes:
+    apiKeyAuth:          # Tên của security scheme
+      type: apiKey
+      in: header
+      name: api-key      # Tên của header chứa api-key
+
+  schemas:
+    DocumentCategory:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        subcategories:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+        - slug
+
+security:
+  - apiKeyAuth: []      # Yêu cầu security scheme này cho tất cả các endpoint
+
+paths:
+  /docCategory:
+    get:
+      summary: Lấy tất cả danh mục tài liệu
+      operationId: getDocumentCategories
+      tags:
+        - Danh mục Tài liệu
+      parameters:
+        - name: page
+          in: query
+          description: Trang hiện tại
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Số lượng mục tối đa mỗi trang
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Thành công - Danh sách các danh mục tài liệu
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DocumentCategory'
+                  pagination:
+                    type: object
+                    properties:
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      totalItems:
+                        type: integer
+                      itemsPerPage:
+                        type: integer
+        '400':
+          description: Lỗi khi yêu cầu không hợp lệ
+        '500':
+          description: Lỗi hệ thống
+
+  /docCategory/{id}:
+    get:
+      summary: Lấy thông tin chi tiết về một danh mục tài liệu
+      operationId: getDocumentCategoryById
+      tags:
+        - Danh mục Tài liệu
+      parameters:
+        - name: id
+          in: path
+          description: ID của danh mục tài liệu
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Thành công - Chi tiết danh mục tài liệu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentCategory'
+        '404':
+          description: Không tìm thấy danh mục tài liệu
+
+    patch:
+      summary: Cập nhật một danh mục tài liệu
+      operationId: updateDocumentCategory
+      tags:
+        - Danh mục Tài liệu
+      parameters:
+        - name: id
+          in: path
+          description: ID của danh mục tài liệu
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentCategory'
+      responses:
+        '200':
+          description: Thành công - Cập nhật danh mục tài liệu
+        '400':
+          description: Lỗi khi dữ liệu không hợp lệ
+        '404':
+          description: Không tìm thấy danh mục tài liệu
+        '500':
+          description: Lỗi hệ thống
+
+    delete:
+      summary: Xóa một danh mục tài liệu
+      operationId: deleteDocumentCategory
+      tags:
+        - Danh mục Tài liệu
+      parameters:
+        - name: id
+          in: path
+          description: ID của danh mục tài liệu
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Thành công - Đã xóa danh mục tài liệu
+        '404':
+          description: Không tìm thấy danh mục tài liệu
+        '500':
+          description: Lỗi hệ thống

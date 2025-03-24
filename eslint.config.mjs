@@ -41,8 +41,8 @@ const config = [
           allow: env === 'development' ? ['log', 'warn', 'error'] : [],
         },
       ],
-      '@typescript-eslint/no-explicit-any': 'off', // Cho phép sử dụng any
-      '@typescript-eslint/no-unused-vars': 'warn', // Cảnh báo nếu có biến không sử dụng
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
 ];

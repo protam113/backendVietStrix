@@ -19,6 +19,25 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.0.2] - 2025-03-24
+
+### Added
+
+- Add get blogs bay type, blog by category, blog by slug
+- Add type in blog model
+- Add ValidBot lib to check data
+- Add Layout.md
+
+### Changed
+
+- Change MRC to Service-Repository Pattern
+
+### Fixed
+
+- No Fixed
+
+---
+
 ## [1.0.2] - 2025-03-22
 
 ### Added
