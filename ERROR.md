@@ -1,5 +1,5 @@
-
 ### 2xx - Success
+
 - **200 OK**: The request was successful and the data is returned.
 - **201 Created**: The request was successfully processed, and a new resource was created.
 - **202 Accepted**: The request has been accepted for processing, but the processing is not yet complete.
@@ -9,6 +9,7 @@
 - **206 Partial Content**: A part of the resource was returned, typically used for partial downloads.
 
 ### 3xx - Redirection
+
 - **300 Multiple Choices**: Multiple choices exist for the requested resource.
 - **301 Moved Permanently**: The resource has permanently moved to a new URL.
 - **302 Found**: The resource has temporarily moved to a different URL.
@@ -19,6 +20,7 @@
 - **308 Permanent Redirect**: The resource has permanently moved, and the HTTP method should remain the same.
 
 ### 4xx - Client Error
+
 - **400 Bad Request**: The request is invalid (client-side error).
 - **401 Unauthorized**: Authentication is required to access the resource.
 - **402 Payment Required**: Reserved for future use, typically for payment purposes.
@@ -50,6 +52,7 @@
 - **451 Unavailable For Legal Reasons**: The resource is unavailable for legal reasons.
 
 ### 5xx - Server Error
+
 - **500 Internal Server Error**: A generic server-side error, the request could not be completed.
 - **501 Not Implemented**: The requested HTTP method is not supported by the server.
 - **502 Bad Gateway**: The server received an invalid response from an upstream server.
@@ -63,6 +66,7 @@
 - **511 Network Authentication Required**: Network authentication is required to access the resource.
 
 ### Summary
+
 - **200-299** status codes indicate that the request was successful.
 - **300-399** status codes indicate that the request requires redirection.
 - **400-499** status codes indicate client-side errors.

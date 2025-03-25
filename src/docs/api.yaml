@@ -9,10 +9,10 @@ servers:
 
 components:
   securitySchemes:
-    apiKeyAuth:          # Tên của security scheme
+    apiKeyAuth: # Tên của security scheme
       type: apiKey
       in: header
-      name: api-key      # Tên của header chứa api-key
+      name: api-key # Tên của header chứa api-key
 
   schemas:
     DocumentCategory:
@@ -33,7 +33,7 @@ components:
         - slug
 
 security:
-  - apiKeyAuth: []      # Yêu cầu security scheme này cho tất cả các endpoint
+  - apiKeyAuth: [] # Yêu cầu security scheme này cho tất cả các endpoint
 
 paths:
   /docCategory:

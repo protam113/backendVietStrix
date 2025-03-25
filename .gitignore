@@ -13,6 +13,9 @@
 # testing
 /coverage
 
+# Ignore thư mục db
+/db
+
 # next.js
 /.next/
 /out/

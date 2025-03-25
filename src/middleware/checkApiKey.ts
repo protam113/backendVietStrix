@@ -1,23 +1,49 @@
-import { Request, Response, NextFunction } from "express";
-import * as dotenv from "dotenv";
+import { Request, Response, NextFunction } from 'express';
+import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-// API_KEY đúng (có thể lưu vào biến môi trường `.env`)
-const API_KEY = process.env.NEXT_PRIVATE_API_KEY || "";
+// API key validation interface
+interface ApiKeyValidationResult {
+  isValid: boolean;
+  message?: string;
+}
 
-export const checkApiKey = (req: Request, res: Response, next: NextFunction): void => {
-    const clientApiKey = req.headers["api-key"] as string;
-  
-    if (!clientApiKey) {
-      res.status(401).json({ error: "API key is required" });
-      return; // 🔥 Thêm return để tránh lỗi
-    }
-  
-    if (clientApiKey !== API_KEY) {
-      res.status(403).json({ error: "Invalid API key" });
-      return; // 🔥 Thêm return để tránh lỗi
-    }
-  
-    next(); // Tiếp tục xử lý request nếu API key hợp lệ
-  };
+export const checkApiKey = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const clientApiKey = req.headers['api-key'] as string;
+  const validationResult = validateApiKey(clientApiKey);
+
+  if (!validationResult.isValid) {
+    res.status(validationResult.isValid ? 200 : 401).json({
+      error: validationResult.message || 'Authentication failed',
+    });
+    return;
+  }
+
+  next();
+};
+
+// Separate validation logic for better testability and flexibility
+const validateApiKey = (clientApiKey?: string): ApiKeyValidationResult => {
+  const API_KEY = process.env.NEXT_PRIVATE_API_KEY || '';
+
+  if (!clientApiKey) {
+    return {
+      isValid: false,
+      message: 'API key is required',
+    };
+  }
+
+  if (clientApiKey !== API_KEY) {
+    return {
+      isValid: false,
+      message: 'Invalid API key',
+    };
+  }
+
+  return { isValid: true };
+};

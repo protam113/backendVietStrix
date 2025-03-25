@@ -1,13 +1,12 @@
-import DocumentCategory from "./documentCategory.model";
-import { AppError } from "../../helpers/AppError"; 
+import DocumentCategory from './documentCategory.model';
+import { AppError } from '../../helpers/AppError';
 
 export class DocumentCategoryRepository {
-  
   // Hàm chung để xử lý lỗi
   private handleError(action: string, error: any) {
     console.error(`${action} failed:`, error);
     if (error.code === 11000) {
-      throw new AppError("Document category already exists.", 400); // Trường hợp lỗi trùng lặp
+      throw new AppError('Document category already exists.', 400); // Trường hợp lỗi trùng lặp
     }
     throw new AppError(`${action} failed: ${error.message || error}`, 500); // Các lỗi khác
   }
@@ -20,7 +19,7 @@ export class DocumentCategoryRepository {
       this.handleError('Creating document category', error);
     }
   }
-    
+
   // Tìm một documentCategory theo query
   async findOne(query: any) {
     try {

@@ -1,62 +1,114 @@
-Service-Repository Pattern
+# Service-Repository Pattern Project Structure
 
-📦 project-root/
- ┣ 📂 src/
- ┃ ┣ 📂 config/          # Cấu hình hệ thống (DB, env, logger)
- ┃ ┃ ┣ 📜 database.ts    # Kết nối DB (MongoDB / MySQL / PostgreSQL)
- ┃ ┃ ┣ 📜 env.ts         # Load biến môi trường từ .env
- ┃ ┃ ┗ 📜 logger.ts      # Cấu hình logger (Winston / Pino)
- ┃ ┣ 📂 modules/         # Các module chính trong hệ thống
- ┃ ┃ ┣ 📂 blog/          # Module Blog
- ┃ ┃ ┃ ┣ 📜 blog.controller.ts   # Xử lý request từ client
- ┃ ┃ ┃ ┣ 📜 blog.service.ts      # Business logic của blog
- ┃ ┃ ┃ ┣ 📜 blog.repository.ts   # Tầng giao tiếp với database
- ┃ ┃ ┃ ┣ 📜 blog.model.ts        # Định nghĩa model/schema
- ┃ ┃ ┃ ┣ 📜 blog.route.ts        # Define routes cho blog
- ┃ ┃ ┃ ┗ 📜 blog.interface.ts    # Định nghĩa types cho blog
- ┃ ┃ ┣ 📂 blogCategory/  # Module Blog Category
- ┃ ┃ ┃ ┣ 📜 blogCategory.controller.ts
- ┃ ┃ ┃ ┣ 📜 blogCategory.service.ts
- ┃ ┃ ┃ ┣ 📜 blogCategory.repository.ts
- ┃ ┃ ┃ ┣ 📜 blogCategory.model.ts
- ┃ ┃ ┃ ┣ 📜 blogCategory.route.ts
- ┃ ┃ ┃ ┗ 📜 blogCategory.interface.ts
- ┃ ┃ ┣ 📂 document/      # Module Document
- ┃ ┃ ┃ ┣ 📜 document.controller.ts
- ┃ ┃ ┃ ┣ 📜 document.service.ts
- ┃ ┃ ┃ ┣ 📜 document.repository.ts
- ┃ ┃ ┃ ┣ 📜 document.model.ts
- ┃ ┃ ┃ ┣ 📜 document.route.ts
- ┃ ┃ ┃ ┗ 📜 document.interface.ts
- ┃ ┃ ┣ 📂 documentCategory/ # Module Document Category
- ┃ ┃ ┃ ┣ 📜 documentCategory.controller.ts
- ┃ ┃ ┃ ┣ 📜 documentCategory.service.ts
- ┃ ┃ ┃ ┣ 📜 documentCategory.repository.ts
- ┃ ┃ ┃ ┣ 📜 documentCategory.model.ts
- ┃ ┃ ┃ ┣ 📜 documentCategory.route.ts
- ┃ ┃ ┃ ┗ 📜 documentCategory.interface.ts
- ┃ ┃ ┣ 📂 contact/       # Module Contact (Liên hệ)
- ┃ ┃ ┃ ┣ 📜 contact.controller.ts
- ┃ ┃ ┃ ┣ 📜 contact.service.ts
- ┃ ┃ ┃ ┣ 📜 contact.repository.ts
- ┃ ┃ ┃ ┣ 📜 contact.model.ts
- ┃ ┃ ┃ ┣ 📜 contact.route.ts
- ┃ ┃ ┃ ┗ 📜 contact.interface.ts
- ┃ ┣ 📂 middlewares/     # Các middleware (validation, error handler)
- ┃ ┃ ┣ 📜 error.middleware.ts    # Middleware xử lý lỗi
- ┃ ┃ ┗ 📜 validate.middleware.ts # Middleware validate input
- ┃ ┣ 📂 utils/           # Các hàm helper chung (format, hash, response)
- ┃ ┣ 📜 app.ts           # Khởi tạo Express App (middleware, routes)
- ┃ ┣ 📜 server.ts        # Chạy server (listen port)
- ┃ ┗ 📜 routes.ts        # Import & tổ chức các routes
- ┣ 📂 tests/             # Thư mục chứa unit tests (Jest / Mocha)
- ┃ ┣ 📜 blog.test.ts     # Test blog module
- ┃ ┣ 📜 document.test.ts # Test document module
- ┃ ┗ 📜 contact.test.ts  # Test contact module
- ┣ 📂 docs/              # API docs (Swagger / Postman Collection)
- ┃ ┗ 📜 api.yaml         # Swagger API spec
- ┣ 📜 .env               # Biến môi trường
- ┣ 📜 .gitignore         # File ignore Git
- ┣ 📜 package.json       # File package JSON
- ┣ 📜 tsconfig.json      # Cấu hình TypeScript
- ┗ 📜 Dockerfile         # Dockerfile build project
+## Project Overview
+
+This architectural pattern separates concerns into distinct layers, promoting modularity, testability, and maintainability.
+
+## Directory Structure
+
+### Root Level
+
+- `📜 .env`: Environment variables
+- `📜 package.json`: Project dependencies
+- `📜 tsconfig.json`: TypeScript configuration
+- `📜 Dockerfile`: Docker configuration
+
+### Source Code Structure (`📂 src/`)
+
+#### Configuration (`📂 config/`)
+
+- `📜 database.ts`: Database connection setup
+- `📜 env.ts`: Environment variable loader
+- `📜 logger.ts`: Logging configuration
+
+#### Modules (`📂 modules/`)
+
+Each module follows a consistent structure:
+
+- `📜 [moduleName].controller.ts`: Handles HTTP requests
+- `📜 [moduleName].service.ts`: Implements business logic
+- `📜 [moduleName].repository.ts`: Database interaction layer
+- `📜 [moduleName].model.ts`: Data models/schemas
+- `📜 [moduleName].route.ts`: Module-specific routes
+- `📜 [moduleName].interface.ts`: TypeScript interfaces
+
+Existing Modules:
+
+- Blog
+- Blog Category
+- Document
+- Document Category
+- Contact
+
+#### Middleware (`📂 middlewares/`)
+
+- `📜 error.middleware.ts`: Global error handling
+- `📜 validate.middleware.ts`: Input validation
+
+#### Utilities (`📂 utils/`)
+
+- Shared helper functions
+- Utility methods
+
+#### Main Application Files
+
+- `📜 app.ts`: Express application setup
+- `📜 server.ts`: Server initialization
+- `📜 routes.ts`: Route aggregation
+
+### Additional Directories
+
+- `📂 tests/`: Unit tests
+- `📂 docs/`: API documentation
+
+## Key Architectural Principles
+
+### Service-Repository Pattern Benefits
+
+- **Separation of Concerns**
+- **Improved Testability**
+- **Flexible Database Interaction**
+- **Clean Code Structure**
+
+### Layer Responsibilities
+
+1. **Controller**:
+
+   - Receives HTTP requests
+   - Validates input
+   - Calls appropriate service methods
+   - Sends responses
+
+2. **Service**:
+
+   - Implements business logic
+   - Coordinates between controllers and repositories
+   - Contains complex computational logic
+
+3. **Repository**:
+   - Direct database interactions
+   - CRUD operations
+   - Query implementations
+
+## Best Practices
+
+- Keep each layer focused on its specific responsibility
+- Use interfaces for strong typing
+- Implement comprehensive error handling
+- Write unit tests for each layer
+- Use dependency injection where possible
+
+## Recommended Tools
+
+- Express.js
+- TypeScript
+- MongoDB/PostgreSQL
+- Mongoose/TypeORM
+- Jest/Mocha for testing
+- Winston/Pino for logging
+
+## Scalability Considerations
+
+- Easy to add new modules
+- Consistent pattern across modules
+- Simple to modify individual components

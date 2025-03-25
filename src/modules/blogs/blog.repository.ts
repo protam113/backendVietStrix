@@ -1,13 +1,13 @@
-import Blog from "./blog.model";
-import { AppError } from "../../helpers/AppError"; 
+import Blog from './blog.model';
+import { AppError } from '../../helpers/AppError';
 
 export class BlogRepository {
   private handleError(action: string, error: any) {
     console.error(`${action} failed:`, error);
     if (error.code === 11000) {
-      throw new AppError("Document  already exists.", 400);
+      throw new AppError('Document  already exists.', 400);
     }
-    throw new AppError(`${action} failed: ${error.message || error}`, 500); 
+    throw new AppError(`${action} failed: ${error.message || error}`, 500);
   }
 
   async create(blogData: any) {
@@ -22,7 +22,7 @@ export class BlogRepository {
     try {
       // The correct path to populate is 'category', not 'DocumentCategory'
       return await Blog.find(filter)
-        .populate("category", "name slug ") // Use 'category' which is the field name in your schema
+        .populate('category', 'name slug ') // Use 'category' which is the field name in your schema
         .skip(skip)
         .limit(limit);
     } catch (error) {
@@ -38,7 +38,6 @@ export class BlogRepository {
     }
   }
 
-
   async count(filter: Record<string, any>) {
     try {
       return await Blog.countDocuments(filter);
@@ -49,12 +48,11 @@ export class BlogRepository {
 
   async findBySlug(slug: string) {
     try {
-      return await Blog.findOne({ slug: slug }); 
+      return await Blog.findOne({ slug: slug });
     } catch (error) {
       throw new Error(`Error finding Blog by slug: ${error}`);
     }
   }
-  
 
   async delete(_id: string) {
     try {
