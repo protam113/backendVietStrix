@@ -1,14 +1,25 @@
 import DocumentCategory from './documentCategory.model';
-import { AppError } from '../../helpers/AppError';
+import { AppError, ErrorType } from '../../helpers/AppError';
 
 export class DocumentCategoryRepository {
   // Hàm chung để xử lý lỗi
   private handleError(action: string, error: any) {
     console.error(`${action} failed:`, error);
+
     if (error.code === 11000) {
-      throw new AppError('Document category already exists.', 400); // Trường hợp lỗi trùng lặp
+      throw AppError.conflict('Blog category already exists.', {
+        action,
+        duplicateKey: error.keyValue,
+        errorCode: 'DUPLICATE_BLOG_CATEGORY',
+      });
     }
-    throw new AppError(`${action} failed: ${error.message || error}`, 500); // Các lỗi khác
+    throw AppError.create(`${action} failed: ${error.message || error}`, {
+      type: ErrorType.INTERNAL_SERVER,
+      context: {
+        action,
+        originalError: error.toString(),
+      },
+    });
   }
 
   // Tạo documentCategory

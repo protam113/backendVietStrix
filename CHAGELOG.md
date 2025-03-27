@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+\
+docker build --target dev -t my-dev-app .
+docker run -p 3000:3000 my-dev-app
+
 ### Added
 
 - Multi-language support for the website.
@@ -55,7 +59,6 @@ All notable changes to this project will be documented in this file.
 
 ---
 
-
 ## [1.0.1] - 2025-03-21
 
 ### Added
@@ -78,6 +81,7 @@ All notable changes to this project will be documented in this file.
 ## [1.0.0] - 2025-03-20
 
 ### Added
+
 - Initial release of the backend service.
 - Structured the backend project with a scalable and modular architecture.
 - Implemented authentication and authorization using JWT.
@@ -85,12 +89,13 @@ All notable changes to this project will be documented in this file.
 - Configured Docker container to run MongoDB and the backend service.
 
 ### Changed
+
 .
 
 ### Fixed
+
 - Optimized database queries for better performance.
 - Improved error handling across the API.
-
 
 ## [0.1.0] - 2025-03-20
 

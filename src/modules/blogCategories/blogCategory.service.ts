@@ -1,5 +1,7 @@
+// blogCategory.servcce.ts
+
 import { BlogCategoryRepository } from './blogCategory.repository';
-import { AppError } from '../../helpers/AppError';
+import { AppError, ErrorType } from '../../helpers/AppError';
 
 export class BlogCategoryService {
   private contactRepo: BlogCategoryRepository;
@@ -14,7 +16,10 @@ export class BlogCategoryService {
         slug: data.slug,
       });
       if (existingCategory) {
-        throw new AppError('Slug already exists', 400); // Trả về lỗi trùng lặp nếu tìm thấy category có slug giống
+        throw AppError.conflict('Slug already exists', {
+          existingSlug: existingCategory.slug,
+          existingCategoryId: existingCategory._id,
+        });
       }
 
       if (data.subcategories && data.subcategories.length > 0) {
@@ -27,9 +32,13 @@ export class BlogCategoryService {
         if (
           parentCategories &&
           parentCategories.length !== data.subcategories.length
-        ) {
-          throw new AppError('Some parent categories do not exist', 400);
-        }
+        )
+          if (parentCategories.length !== data.subcategories.length) {
+            throw AppError.badRequest('Some parent categories do not exist', {
+              requestedSubcategories: data.subcategories,
+              foundSubcategories: parentCategories.map((cat) => cat._id),
+            });
+          }
       }
 
       // Tạo mới document category
@@ -38,12 +47,20 @@ export class BlogCategoryService {
       console.error('MONGO ERROR:', error);
 
       if (error.code === 11000) {
-        throw new AppError('Slug already exists', 400);
+        throw AppError.conflict('Slug already exists', {
+          duplicateKey: error.keyValue,
+        });
       }
 
-      throw new AppError(
+      // Lỗi tạo danh mục không xác định
+      throw AppError.create(
         `Failed to create document category: ${error.message || error}`,
-        500
+        {
+          type: ErrorType.INTERNAL_SERVER,
+          context: {
+            originalError: error.toString(),
+          },
+        }
       );
     }
   }
@@ -62,8 +79,9 @@ export class BlogCategoryService {
         slug: parentSlug,
       });
       if (!parentCategory) {
-        // Nếu không tìm thấy category cha, trả về lỗi 404
-        throw new AppError('Parent category not found', 404);
+        throw AppError.notFound('Parent category not found', {
+          requestedParentId: parentCategory,
+        });
       }
       filter = { subcategories: parentCategory._id }; // Lọc các blog category có subcategories là parentCategory._id
     }

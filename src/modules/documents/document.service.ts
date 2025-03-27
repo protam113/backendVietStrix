@@ -22,7 +22,7 @@ export class DocumentService {
         slug: data.slug,
       });
       if (existingDocument) {
-        throw new AppError('Document slug already exists', 400);
+        throw AppError.conflict('Document slug already exists');
       }
 
       // Kiểm tra xem category có tồn tại trong DocumentCategory collection không
@@ -30,7 +30,7 @@ export class DocumentService {
       const categoryExists = await documentCategoryRepo.findById(data.category);
 
       if (!categoryExists) {
-        throw new AppError('Category not found', 404);
+        throw AppError.notFound('Category not found');
       }
 
       // Nếu mọi thứ hợp lệ, tạo document mới
@@ -40,7 +40,7 @@ export class DocumentService {
 
       // Kiểm tra lỗi trùng lặp key (MongoDB error code 11000)
       if (error.code === 11000) {
-        throw new AppError('Slug already exists', 400);
+        throw AppError.conflict('Slug already exists');
       }
 
       // Nếu đã xử lý lỗi cụ thể (như AppError), ném lại lỗi đó
@@ -49,9 +49,11 @@ export class DocumentService {
       }
 
       // Nếu không phải lỗi trùng lặp hoặc AppError, ném lỗi 500 với thông báo chi tiết
-      throw new AppError(
+      throw AppError.create(
         `Failed to create document: ${error.message || error}`,
-        500
+        {
+          statusCode: 500,
+        }
       );
     }
   }

@@ -1,3 +1,5 @@
+// blogCategory.controller.ts
+
 import { Request, Response } from 'express';
 import { BlogCategoryService } from './blogCategory.service';
 import { AppError } from '../../helpers/AppError';

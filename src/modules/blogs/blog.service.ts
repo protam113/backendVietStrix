@@ -20,7 +20,7 @@ export class BlogService {
       // Kiểm tra xem slug đã tồn tại trong blog collection chưa
       const existingblog = await this.blogRepo.findOne({ slug: data.slug });
       if (existingblog) {
-        throw new AppError('blog slug already exists', 400);
+        throw AppError.conflict('Blog slug already exists');
       }
 
       // Kiểm tra xem category có tồn tại trong blogCategory collection không
@@ -28,7 +28,7 @@ export class BlogService {
       const categoryExists = await blogCategoryRepo.findById(data.category);
 
       if (!categoryExists) {
-        throw new AppError('Category not found', 404);
+        throw AppError.notFound('Category not found');
       }
 
       // Nếu mọi thứ hợp lệ, tạo blog mới
@@ -38,7 +38,7 @@ export class BlogService {
 
       // Kiểm tra lỗi trùng lặp key (MongoDB error code 11000)
       if (error.code === 11000) {
-        throw new AppError('Slug already exists', 400);
+        throw AppError.conflict('Slug already exists');
       }
 
       // Nếu đã xử lý lỗi cụ thể (như AppError), ném lại lỗi đó
@@ -47,9 +47,11 @@ export class BlogService {
       }
 
       // Nếu không phải lỗi trùng lặp hoặc AppError, ném lỗi 500 với thông báo chi tiết
-      throw new AppError(
+      throw AppError.create(
         `Failed to create blog: ${error.message || error}`,
-        500
+        {
+          statusCode: 500,
+        }
       );
     }
   }

@@ -1,5 +1,5 @@
 import { DocumentCategoryRepository } from './documentCategory.repository';
-import { AppError } from '../../helpers/AppError';
+import { AppError, ErrorType } from '../../helpers/AppError';
 
 export class DocumentCategoryService {
   private contactRepo: DocumentCategoryRepository;
@@ -14,7 +14,10 @@ export class DocumentCategoryService {
         slug: data.slug,
       });
       if (existingCategory) {
-        throw new AppError('Slug already exists', 400); // Trả về lỗi trùng lặp nếu tìm thấy category có slug giống
+        throw AppError.conflict('Slug already exists', {
+          existingSlug: existingCategory.slug,
+          existingCategoryId: existingCategory._id,
+        });
       }
 
       return await this.contactRepo.create({ ...data });
@@ -23,13 +26,20 @@ export class DocumentCategoryService {
 
       // Kiểm tra lỗi trùng lặp key (MongoDB error code 11000)
       if (error.code === 11000) {
-        throw new AppError('Slug already exists', 400);
+        throw AppError.conflict('Slug already exists', {
+          duplicateKey: error.keyValue,
+        });
       }
 
       // Nếu không phải lỗi trùng lặp, ném lỗi 500 với thông báo chi tiết
-      throw new AppError(
+      throw AppError.create(
         `Failed to create document category: ${error.message || error}`,
-        500
+        {
+          type: ErrorType.INTERNAL_SERVER,
+          context: {
+            originalError: error.toString(),
+          },
+        }
       );
     }
   }

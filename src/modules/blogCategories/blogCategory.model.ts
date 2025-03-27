@@ -1,3 +1,4 @@
+// blogCategory.model.ts
 import mongoose, { Schema } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { IBlogCategoryForm } from './blogCategory.interface';

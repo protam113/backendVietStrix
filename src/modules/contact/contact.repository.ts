@@ -1,4 +1,4 @@
-import ContactForm from "./contact.model";
+import ContactForm from './contact.model';
 
 export class ContactRepository {
   async create(contactData: any) {
@@ -9,7 +9,12 @@ export class ContactRepository {
     }
   }
 
-  async findAll(filter: Record<string, any>, skip: number, limit: number, sort: Record<string, any>) {
+  async findAll(
+    filter: Record<string, any>,
+    skip: number,
+    limit: number,
+    sort: Record<string, any>
+  ) {
     try {
       return await ContactForm.find(filter).sort(sort).skip(skip).limit(limit);
     } catch (error) {

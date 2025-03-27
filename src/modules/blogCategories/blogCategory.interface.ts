@@ -1,3 +1,5 @@
+// blogCategory.interface.ts
+
 export interface IBlogCategoryForm {
   _id: string;
   name: string;

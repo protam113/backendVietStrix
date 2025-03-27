@@ -1,4 +1,4 @@
-import { ContactRepository } from "./contact.repository";
+import { ContactRepository } from './contact.repository';
 
 export class ContactService {
   private contactRepo: ContactRepository;
@@ -8,20 +8,22 @@ export class ContactService {
   }
 
   async createContact(data: any) {
-    return this.contactRepo.create({ ...data, status: "pending" });
+    return this.contactRepo.create({ ...data, status: 'pending' });
   }
 
   async getContacts(query: any) {
-    const { status, page = "1", limit = "10", createdAt_min = "desc" } = query;
+    const { status, page = '1', limit = '10', createdAt_min = 'desc' } = query;
 
     const filter: any = status ? { status } : {};
     const pageNumber = Math.max(Number(page), 1);
     const limitNumber = Math.max(Number(limit), 1);
     const skip = (pageNumber - 1) * limitNumber;
-    const sortOrder = createdAt_min === "asc" ? 1 : -1;
+    const sortOrder = createdAt_min === 'asc' ? 1 : -1;
 
     const [result, totalContacts] = await Promise.all([
-      this.contactRepo.findAll(filter, skip, limitNumber, { createdAt: sortOrder }),
+      this.contactRepo.findAll(filter, skip, limitNumber, {
+        createdAt: sortOrder,
+      }),
       this.contactRepo.count(filter),
     ]);
 
@@ -41,8 +43,8 @@ export class ContactService {
   }
 
   async updateContactStatus(_id: string, status: string) {
-    if (!["pending", "approved", "rejected"].includes(status)) {
-      throw new Error("Invalid status value");
+    if (!['pending', 'approved', 'rejected'].includes(status)) {
+      throw new Error('Invalid status value');
     }
     return this.contactRepo.updateStatus(_id, status);
   }

@@ -1,6 +1,6 @@
-import mongoose, { Schema } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
-import { IContactForm } from "./contact.interface";
+import mongoose, { Schema } from 'mongoose';
+import { v4 as uuidv4 } from 'uuid';
+import { IContactForm } from './contact.interface';
 
 const ContactFormSchema = new Schema<IContactForm>(
   {
@@ -10,9 +10,13 @@ const ContactFormSchema = new Schema<IContactForm>(
     phone_number: { type: String, required: true },
     message: { type: String, required: true },
     link: { type: String, default: null },
-    status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending',
+    },
   },
   { timestamps: true }
 );
 
-export default mongoose.model<IContactForm>("ContactForm", ContactFormSchema);
+export default mongoose.model<IContactForm>('ContactForm', ContactFormSchema);

@@ -1,23 +1,47 @@
+// blogCategory.repository.ts
+
 import BlogCategory from './blogCategory.model';
-import { AppError } from '../../helpers/AppError';
+import { AppError, ErrorType } from '../../helpers/AppError';
 import { IBlogCategoryForm } from './blogCategory.interface';
 
 export class BlogCategoryRepository {
   // Hàm chung để xử lý lỗi
   private handleError(action: string, error: any): never {
     console.error(`${action} failed:`, error);
+
     if (error.code === 11000) {
-      throw new AppError('Blog category already exists.', 400);
+      throw AppError.conflict('Blog category already exists.', {
+        action,
+        duplicateKey: error.keyValue,
+        errorCode: 'DUPLICATE_BLOG_CATEGORY',
+      });
     }
-    throw new AppError(`${action} failed: ${error.message || error}`, 500);
+
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw AppError.create(`${action} failed: ${error.message || error}`, {
+      type: ErrorType.INTERNAL_SERVER,
+      context: {
+        action,
+        originalError: error.toString(),
+      },
+    });
   }
 
   // Tạo blogCategory
   async create(blogCategory: IBlogCategoryForm): Promise<IBlogCategoryForm> {
     try {
       // Kiểm tra tính hợp lệ của dữ liệu (optional)
+      // Sử dụng AppError mới
       if (!blogCategory.name || !blogCategory.slug) {
-        throw new AppError('Name and slug are required.', 400);
+        throw AppError.badRequest('Name and slug are required.', {
+          missingFields: {
+            ...(blogCategory.name ? {} : { name: 'Name is missing' }),
+            ...(blogCategory.slug ? {} : { slug: 'Slug is missing' }),
+          },
+        });
       }
 
       // Thực hiện một số xử lý trước khi lưu, như chuẩn hóa slug
@@ -28,7 +52,13 @@ export class BlogCategoryRepository {
         slug: blogCategory.slug,
       });
       if (existingCategory) {
-        throw new AppError('Blog category already exists.', 400);
+        throw AppError.conflict('Blog category already exists.', {
+          existingCategory: {
+            id: existingCategory._id,
+            name: existingCategory.name,
+            slug: existingCategory.slug,
+          },
+        });
       }
 
       // Tạo mới danh mục blog

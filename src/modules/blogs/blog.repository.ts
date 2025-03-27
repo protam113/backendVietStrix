@@ -1,13 +1,24 @@
 import Blog from './blog.model';
-import { AppError } from '../../helpers/AppError';
+import { AppError, ErrorType } from '../../helpers/AppError';
 
 export class BlogRepository {
   private handleError(action: string, error: any) {
     console.error(`${action} failed:`, error);
+
     if (error.code === 11000) {
-      throw new AppError('Document  already exists.', 400);
+      throw AppError.conflict('Document category already exists.', {
+        action,
+        duplicateKey: error.keyValue,
+        errorCode: 'DUPLICATE_BLOG_CATEGORY',
+      });
     }
-    throw new AppError(`${action} failed: ${error.message || error}`, 500);
+    throw AppError.create(`${action} failed: ${error.message || error}`, {
+      type: ErrorType.INTERNAL_SERVER,
+      context: {
+        action,
+        originalError: error.toString(),
+      },
+    });
   }
 
   async create(blogData: any) {

@@ -5,9 +5,15 @@ export class DocumentRepository {
   private handleError(action: string, error: any) {
     console.error(`${action} failed:`, error);
     if (error.code === 11000) {
-      throw new AppError('Document  already exists.', 400);
+      throw AppError.conflict('Document already exists.', {
+        action,
+        duplicateKey: error.keyValue,
+        errorCode: 'DUPLICATE_DOCUMENT',
+      });
     }
-    throw new AppError(`${action} failed: ${error.message || error}`, 500);
+    throw AppError.create(`${action} failed: ${error.message || error}`, {
+      statusCode: 500,
+    });
   }
 
   async create(documentData: any) {
@@ -32,7 +38,7 @@ export class DocumentRepository {
 
   async findOne(query: any) {
     try {
-      return await Document.findOne(query);
+      return await Document.findOne(query).populate('category', 'name slug');
     } catch (error) {
       this.handleError('Finding document category', error);
     }
@@ -48,7 +54,10 @@ export class DocumentRepository {
 
   async findBySlug(slug: string) {
     try {
-      return await Document.findOne({ slug: slug }); // Tìm tài liệu theo slug
+      return await Document.findOne({ slug: slug }).populate(
+        'category',
+        'name slug'
+      ); // Tìm tài liệu theo slug
     } catch (error) {
       throw new Error(`Error finding document by slug: ${error}`);
     }
