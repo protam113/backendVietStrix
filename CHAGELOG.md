@@ -4,10 +4,6 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-\
-docker build --target dev -t my-dev-app .
-docker run -p 3000:3000 my-dev-app
-
 ### Added
 
 - Multi-language support for the website.
@@ -20,6 +16,38 @@ docker run -p 3000:3000 my-dev-app
 - Fixed login issue when using OAuth.
 
 ### Removed
+
+---
+
+## [1.0.4] - 2025-03-29
+
+### Added
+
+- No Added
+
+### Changed
+
+- No Changed
+
+### Fixed
+
+- Fix get blogs and docs by category
+
+---
+
+## [1.0.4] - 2025-03-29
+
+### Added
+
+- Add api for FaQ , get all FaQ, create FaQ, update FaQ, delete FaQ
+
+### Changed
+
+- No Changed
+
+### Fixed
+
+- No Fixed
 
 ---
 

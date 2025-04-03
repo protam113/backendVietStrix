@@ -1,24 +1,48 @@
 import { Request, Response } from 'express';
 import { ContactService } from './contact.service';
+import upload from '../../config/multer.config';
+import sendThankYouEmail from '../../services/mailService';
 
-let contactService = new ContactService(); // Biến toàn cục để lưu service instance
+let contactService = new ContactService();
 
 export const setContactService = (service: ContactService) => {
   contactService = service; // Cho phép thay thế service khi test
 };
 
-export const createContact = async (req: Request, res: Response) => {
+export const createContact = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const newContact = await contactService.createContact(req.body);
-    res
-      .status(201)
-      .json({ message: 'Contact created successfully', data: newContact });
+    await upload.none()(req, res, async () => {
+      const { name, email, message } = req.body;
+
+      if (!name || !email || !message) {
+        res.status(400).json({ message: 'Missing required fields' });
+        return;
+      }
+
+      const newContact = await contactService.createContact(req.body);
+      res
+        .status(201)
+        .json({ message: 'Contact created successfully', data: newContact });
+
+      try {
+        await sendThankYouEmail({
+          recipientEmail: email,
+          name: name,
+        });
+        console.log('🎉 Email sent successfully!');
+      } catch (error) {
+        console.error('❌ Email send failed:', error);
+      }
+    });
   } catch (error) {
-    console.error(
-      'Error creating contact:',
-      error instanceof Error ? error.stack : error
-    );
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error('Error creating contact:', error);
+    res.status(500).json({
+      message: 'Error processing request',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };
 

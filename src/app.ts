@@ -15,7 +15,8 @@ const app = express();
 const swaggerDocument = YAML.load(
   path.join(__dirname, '..', 'src', 'docs', 'api.yaml')
 );
-
+const mail = process.env.EMAIL_USER;
+console.log(mail);
 // Cấu hình Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

@@ -52,7 +52,6 @@ export class AppError extends Error {
   }
 
   // Phương thức tĩnh để tạo lỗi nhanh
-  // Phương thức tĩnh để tạo lỗi nhanh
   static create(
     message: string,
     options: {

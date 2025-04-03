@@ -57,17 +57,24 @@ export class BlogService {
   }
 
   async getBlogs(query: any) {
-    const { status, page = '1', limit = '10' } = query;
+    const { type, category, page = '1', limit = '10' } = query;
 
-    const filter: any = status ? { status } : {};
+    const filter: any = {};
+    if (type) {
+      if (type === 'popular') {
+        filter.type = 'popular'; // Giả sử 'status' là trường xác định loại blog
+      } else if (type === 'normal') {
+        filter.type = 'normal'; // Lọc các blog 'normal'
+      }
+    }
+    if (category) filter.category = category; // Lọc theo _id của category
+
     const pageNumber = Math.max(Number(page), 1);
     const limitNumber = Math.max(Number(limit), 1);
     const skip = (pageNumber - 1) * limitNumber;
 
-    // First, update your blogRepo.findAll method to include populate:
-    // This assumes you've modified the findAll method in your repository
     const [result, totalContacts] = await Promise.all([
-      this.blogRepo.findAll(filter, skip, limitNumber), // This should have populate inside
+      this.blogRepo.findAll(filter, skip, limitNumber),
       this.blogRepo.count(filter),
     ]);
 
@@ -81,6 +88,7 @@ export class BlogService {
       },
     };
   }
+
   async getBlogBySlug(slug: string) {
     return this.blogRepo.findBySlug(slug);
   }

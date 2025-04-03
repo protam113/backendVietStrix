@@ -59,9 +59,11 @@ export class DocumentService {
   }
 
   async getDocuments(query: any) {
-    const { status, page = '1', limit = '10' } = query;
+    const { category, page = '1', limit = '10' } = query;
 
-    const filter: any = status ? { status } : {};
+    const filter: any = {};
+    if (category) filter.category = category;
+
     const pageNumber = Math.max(Number(page), 1);
     const limitNumber = Math.max(Number(limit), 1);
     const skip = (pageNumber - 1) * limitNumber;
