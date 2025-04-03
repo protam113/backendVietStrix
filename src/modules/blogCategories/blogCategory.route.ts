@@ -1,12 +1,13 @@
 import express from 'express';
 import * as BlogCategoryController from './blogCategory.controller';
 import { checkApiKey } from '../../middleware/checkApiKey';
+import upload from '../../config/formData';
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(checkApiKey, BlogCategoryController.createBlogCategory)
+  .post(checkApiKey, upload.none(), BlogCategoryController.createBlogCategory)
   .get(BlogCategoryController.getBlogCategories);
 
 router

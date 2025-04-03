@@ -19,6 +19,22 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.0.4] - 2025-05-03
+
+### Added
+
+- No Added
+
+### Changed
+
+- Changed all to formData
+
+### Fixed
+
+- No fixed
+
+---
+
 ## [1.0.4] - 2025-03-29
 
 ### Added

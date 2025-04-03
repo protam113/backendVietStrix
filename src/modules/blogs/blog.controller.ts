@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { BlogService } from './blog.service';
 import { AppError } from '../../helpers/AppError';
+import upload from '../../config/multer.config';
+import { IBlog } from './blog.interface';
 
 let bLogService = new BlogService(); // Biến toàn cục để lưu service instance
 

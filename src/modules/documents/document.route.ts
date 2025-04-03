@@ -1,12 +1,13 @@
 import express from 'express';
 import * as DocumentController from './document.controller';
 import { checkApiKey } from '../../middleware/checkApiKey';
+import upload from '../../config/formData';
 
 const router = express.Router();
 
 router
   .route('/')
-  .post(DocumentController.createDocumentData)
+  .post(checkApiKey, upload.none(), DocumentController.createDocumentData)
   .get(checkApiKey, DocumentController.getDocument);
 
 router

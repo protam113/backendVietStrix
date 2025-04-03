@@ -6,7 +6,7 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(ContactController.createContact)
+  .post(checkApiKey, ContactController.createContact)
   .get(checkApiKey, ContactController.getContacts);
 
 router
